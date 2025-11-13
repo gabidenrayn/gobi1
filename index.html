@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fly Emirates — Билеты онлайн</title>
+
+  <style>
+    :root {
+      --burgundy: #a80000;
+      --burgundy-dark: #800000;
+      --bg: #f6f6f6;
+      --card: #ffffff;
+      --text: #2b2b2b;
+      --muted: #6b6b6b;
+      --maxw: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrapper {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .map-container {
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+
+
+    /* ✅ ВСПЛЫВАЮЩАЯ ШАПКА */
+    header {
+      position: sticky;
+      top: 12px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      margin-bottom: 18px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo img {
+      width: 46px;
+      height: 46px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .brand {
+      font-size: 18px;
+      color: var(--burgundy);
+      font-weight: 700;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 18px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      color: var(--muted);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    nav a:hover { color: var(--burgundy); }
+
+    .auth-btn {
+      padding: 8px 16px;
+      background: var(--burgundy);
+      color: white;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .auth-btn:hover {
+      background: var(--burgundy-dark);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* ✅ HERO с плавающим текстом */
+    .hero {
+      margin: 10px 0 18px;
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    .hero img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+    }
+    .hero .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,.4), rgba(0,0,0,.2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    /* ✅ Анимация плавания текста */
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0); }
+    }
+
+    .hero h1 {
+      color: #fff;
+      font-size: 34px;
+      margin: 0;
+      text-align: center;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    /* SEARCH */
+    .search-section {
+      margin: 18px 0;
+      background: var(--card);
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+
+    .chip input, .chip select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: none;
+      background: var(--burgundy);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      opacity: .9;
+    }
+
+    .search-btn button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: var(--burgundy);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .search-btn button:hover {
+      background: var(--burgundy-dark);
+    }
+
+    /* SECTIONS */
+    .section {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    }
+    .section h2 {
+      color: var(--burgundy);
+      margin: 0 0 12px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fafafa;
+      border: 1px solid #eee;
+      transition: .2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .content {
+      padding: 12px;
+    }
+    .content h3 {
+      margin: 0 0 6px;
+      color: var(--burgundy);
+    }
+    .content p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ✅ ВИДЕО */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      margin-bottom: 20px;
+    }
+    .video-container iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ✅ REVIEWS */
+    .reviews-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .reviews-cards {
+      display: flex;
+      overflow-x: auto;
+      gap: 16px;
+      scroll-behavior: smooth;
+      padding-bottom: 10px;
+    }
+    .reviews-cards::-webkit-scrollbar { display: none; }
+
+    .review-card {
+      min-width: 250px;
+      padding: 16px;
+      background: #fafafa;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      box-shadow: 0 3px 8px rgba(0,0,0,.05);
+    }
+
+    .scroll-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--burgundy);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    .scroll-btn:hover { background: var(--burgundy-dark); }
+
+    footer {
+      margin: 30px 0;
+      text-align: center;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&w=80&q=80">
+      <p class="brand">Fly Emirates</p>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a href="#">Главная</a></li>
+        <li><a href="#">Направления</a></li>
+        <li><a href="#">Акции</a></li>
+        <li><a href="#">Контакты</a></li>
+        <li><a href="login.html" class="auth-btn">Вход</a></li>
+        <li><a href="register.html" class="auth-btn" style="background: transparent; border: 2px solid var(--burgundy); color: var(--burgundy);">Регистрация</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&w=1600&q=80">
+    <div class="overlay">
+      <h1>Путешествуй с комфортом — находи лучшие предложения</h1>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <section class="search-section">
+    <form class="search-grid" onsubmit="event.preventDefault(); alert('Демо поиск');">
+
+      <div class="field">
+        <label>Откуда</label>
+        <input type="text" placeholder="Алматы">
+      </div>
+
+      <div class="field">
+        <label>Куда</label>
+        <input type="text" placeholder="Дубай">
+      </div>
+
+      <div class="chip">
+        <label>Туда</label>
+        <input type="date">
+      </div>
+
+      <div class="chip">
+        <label>Обратно</label>
+        <input type="date">
+      </div>
+
+      <div class="chip">
+        <label>Пассажиры</label>
+        <select>
+          <option>1 пассажир</option>
+          <option>2 пассажира</option>
+        </select>
+      </div>
+
+      <div class="chip">
+        <label>Класс</label>
+        <select>
+          <option>Эконом</option>
+          <option>Бизнес</option>
+        </select>
+      </div>
+
+      <div class="search-btn" style="grid-column: span 6;">
+        <button>Найти билеты</button>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- POPULAR -->
+  <section class="section">
+    <h2>Популярные направления</h2>
+    <div class="cards">
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&w=900&q=80">
+        <div class="content">
+          <h3>Алматы — Дубай</h3>
+          <p>Спецпредложения. От 85 000 ₸</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&w=900&q=80">
+        <div class="content">
+          <h3>Алматы — Нью-Йорк</h3>
+          <p>Комфортные перелёты, выгодные цены.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&w=900&q=80">
+        <div class="content">
+          <h3>Астана — Париж</h3>
+          <p>Романтика и культура — специальные даты.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ✅ ВИДЕО о путешествиях -->
+  <section class="section">
+    <h2>Погрузитесь в атмосферу путешествий</h2>
+    <div class="video-container">
+      <iframe src="See you at Dubai Expo _ Emirates.mp4" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="section">
+    <h2>Отзывы</h2>
+
+    <div class="reviews-wrapper">
+      <button class="scroll-btn left">‹</button>
+
+      <div class="reviews-cards">
+        <div class="review-card">
+          <h3>Айгерим</h3>
+          <p>Очень удобный сервис! Беру билеты только здесь.</p>
+        </div>
+
+        <div class="review-card">
+          <h3>Дамир</h3>
+          <p>Нашёл дешёвый билет в Дубай. Всё супер.</p>
+        </div>
+
+        <div class="review-card">
+          <h3>Виктория</h3>
+          <p>Удобный поиск, быстрая оплата.</p>
+        </div>
+
+        <div class="review-card">
+          <h3>Руслан</h3>
+          <p>Поддержка помогла с возвратом. Рекомендую.</p>
+        </div>
+      </div>
+
+      <button class="scroll-btn right">›</button>
+    </div>
+  </section>
+
+  <!-- ✅ GOOGLE MAPS -->
+<section class="section">
+  <h2>Мы на карте</h2>
+
+  <div class="map-container">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3265.510642547139!2d71.4021583764653!3d51.088006141899434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x42458549525a787f%3A0x6a91a76e2d3cf1f3!2z0JfQvdCw0YLQtdGA0L3QsNGPINGD0LsuINCh0LDQvdGB0LXRgNCw0LsgMiwg0JDQstGC0L7Qv9C-0LLRgdC60LjQuSDQk9C10YDQvdCw0L3QtNCw0YHRgtCy0LA!5e0!3m2!1sru!2skz!4v1730900000000!5m2!1sru!2skz"
+      width="100%" height="400" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy">
+    </iframe>
+  </div>
+</section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 Fly Emirates — демо-версия сайта.
+  </footer>
+
+</div>
+
+<script>
+  /* ✅ РУЧНАЯ ПРОКРУТКА ОТЗЫВОВ */
+  const container = document.querySelector(".reviews-cards");
+  document.querySelector(".scroll-btn.right").onclick = () => container.scrollBy({ left: 300, behavior: "smooth" });
+  document.querySelector(".scroll-btn.left").onclick = () => container.scrollBy({ left: -300, behavior: "smooth" });
+
+  /* ✅ АВТОПЕРЕЛИСТЫВАНИЕ (ЗАЦИКЛЕНО) */
+  setInterval(() => {
+    container.scrollBy({ left: 300, behavior: "smooth" });
+
+    if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 5) {
+      container.scrollTo({ left: 0, behavior: "smooth" });
+    }
+  }, 3000);
+</script>
+
+</body>
+</html>
+
+

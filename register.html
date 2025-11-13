@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Регистрация — Fly Emirates</title>
+
+  <style>
+    :root {
+      --burgundy: #a80000;
+      --burgundy-dark: #800000;
+      --bg: #f6f6f6;
+      --card: #ffffff;
+      --text: #2b2b2b;
+      --muted: #6b6b6b;
+      --maxw: 500px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #f6f6f6 0%, #e9e9e9 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: var(--maxw);
+      width: 100%;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+      padding: 30px 20px;
+      text-align: center;
+      color: white;
+    }
+
+    .header img {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .header p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .form-container {
+      padding: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--burgundy);
+      box-shadow: 0 0 0 3px rgba(168, 0, 0, 0.1);
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(168, 0, 0, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .footer-links {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .footer-links a {
+      color: var(--burgundy);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Адаптивность для мобильных */
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 24px;
+      }
+      
+      .form-container {
+        padding: 24px 20px;
+      }
+
+      input {
+        padding: 12px 14px;
+      }
+
+      .btn {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="header">
+    <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&w=80&q=80" alt="Fly Emirates">
+    <h1>Регистрация</h1>
+    <p>Создайте аккаунт для бронирования билетов</p>
+  </div>
+
+  <div class="form-container">
+    <div id="message" class="message"></div>
+
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="name">Имя *</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          placeholder="Введите ваше имя" 
+          required
+          minlength="2"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="email">Электронная почта *</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="example@mail.com" 
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="age">Возраст *</label>
+        <input 
+          type="number" 
+          id="age" 
+          name="age" 
+          placeholder="Введите ваш возраст" 
+          required
+          min="1"
+          max="120"
+        >
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn">
+        Сохранить
+      </button>
+    </form>
+
+    <div class="footer-links">
+      <a href="login.html">Уже есть аккаунт? Войти</a>
+      <br><br>
+      <a href="index.html">← Вернуться на главную</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('registerForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const messageDiv = document.getElementById('message');
+
+  // ⚠️ ВАЖНО: Замените на ваш URL от Google Apps Script
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyh2vezzV_t0V0gsjXDfYC07fptbthII_Giemw390sGbjZQFcH5DWeKMNX_89SE76KLVw/exec';
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Получаем данные формы
+    const formData = {
+      name: document.getElementById('name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      age: document.getElementById('age').value
+    };
+
+    // Валидация
+    if (!formData.name || !formData.email || !formData.age) {
+      showMessage('Пожалуйста, заполните все поля', 'error');
+      return;
+    }
+
+    // Проверка email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      showMessage('Введите корректный email адрес', 'error');
+      return;
+    }
+
+    // Проверка возраста
+    if (formData.age < 1 || formData.age > 120) {
+      showMessage('Введите корректный возраст', 'error');
+      return;
+    }
+
+    // Отправка данных
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Сохранение <span class="loading"></span>';
+    
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Важно для Google Apps Script
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'register',
+          ...formData
+        })
+      });
+
+      // С no-cors мы не можем прочитать ответ, поэтому считаем успешным
+      showMessage('Регистрация прошла успешно! Перенаправление...', 'success');
+      
+      // Очистка формы
+      form.reset();
+      
+      // Перенаправление на страницу входа через 2 секунды
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+
+    } catch (error) {
+      console.error('Ошибка:', error);
+      showMessage('Ошибка при регистрации. Проверьте настройки Google Apps Script.', 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Сохранить';
+    }
+  });
+
+  function showMessage(text, type) {
+    messageDiv.textContent = text;
+    messageDiv.className = `message ${type}`;
+    
+    if (type === 'error') {
+      setTimeout(() => {
+        messageDiv.className = 'message';
+      }, 5000);
+    }
+  }
+</script>
+
+</body>
+</html>
